@@ -320,6 +320,8 @@ sparse_read(Config) ->
     NumDiv2 = Num div 2,
     %% create a list of indexes with some consecutive and some gaps
     Indexes = lists:usort(lists:seq(1, Num, 2) ++ lists:seq(1, Num, 5)),
+    %% make sure that the ETS deletes have been finished before we re-init
+    gen_server:call(ra_log_ets, ok),
     LogTake = ra_log_init(Config),
     {TimeTake, {_, LogTake1}} =
         timer:tc(fun () ->
